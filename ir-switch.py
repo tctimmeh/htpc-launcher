@@ -14,9 +14,9 @@ handler.setFormatter(formatter)
 log.addHandler(handler)
 
 class Command(object):
-  def __init__(self, command, kill, needsNine = False):
+  def __init__(self, command, search, needsNine = False):
     self.command = command
-    self.kill = kill
+    self.search = search
     self.needsNine = needsNine
 
   def __str__(self):
@@ -40,11 +40,15 @@ class Process(object):
     log.info('Waiting for process death')
     self.proc.wait()
 
+  def focus(self):
+    log.info('Focusing %s' % self.command)
+    subprocess.call('wmctrl -a %s' % self.command, shell = True)
+    
   def _killChild(self):
     log.info('Killing %s, pid = [%d]', self.command, self.proc.pid)
-    pid = self._findPidToKill()
+    pid = self._findPid()
     if not pid:
-      log.error('Failed to find pid to kill')
+      log.error('Failed to find pid to kill - couldn\'t find running process')
       return
 
     killCmd = 'kill '
@@ -54,14 +58,14 @@ class Process(object):
     log.info('Running kill command: %s', killCmd)
     subprocess.call(killCmd, shell = True)
 
-  def _findPidToKill(self):
-    log.info('Searching for Process to kill regex: %s', self.command.kill)
-    findProc = subprocess.Popen('ps -ef | grep -P "%s" | grep -v grep' % self.command.kill, shell = True, stdout = subprocess.PIPE)
+  def _findPid(self):
+    log.info('Searching for Process with regex: %s', self.command.search)
+    findProc = subprocess.Popen('ps -ef | grep -P "%s" | grep -v grep' % self.command.search, shell = True, stdout = subprocess.PIPE)
     findOut = findProc.communicate()[0]
     if not findOut:
       return None
 
-    log.info('Found proccess to kill: %s', findOut)
+    log.info('Found proccess: %s', findOut)
     return findOut.split()[1]
 
 class IrSwitchApp(object):
@@ -97,6 +101,7 @@ class IrSwitchApp(object):
 
     if (self.currentProcess) and (command is self.currentProcess.command):
       log.info('This process is already running')
+      self.currentProcess.focus()
       return
 
     if self.currentProcess:
