@@ -68,53 +68,64 @@ class IrSwitchApp(object):
 
   def run(self):
     while True:
+      self._connectToLirc()
       if not self.lircSocket:
-        self.lircSocket = self.connectToLirc()
-      if not self.lircSocket:
-        self.lircSocket.close()
-        self.lircSocket = None
         time.sleep(1)
         continue
       
-      try:
-        readable, writable, exception = select([self.lircSocket], [], [])
-        if self.lircSocket in readable:
-          data = self.lircSocket.recv(1024)
-          if not data:
-            break
+      readable, writable, exception = select([self.lircSocket], [], [])
+      data = self.lircSocket.recv(1024)
+      if not data:
+        self._disconnectFromLirc()
+        continue
+      self._processLircMessage(data)
 
-          data = data.strip().split()
-          keyName = data[2]
-          log.info('Received IR key: %s', keyName)
-          command = self.commands.get(keyName)
-          if (self.currentProcess) and (command is self.currentProcess.command):
-            log.info('This process is already running')
-            continue
+  def _runCommand(self, command):
+    if command is None:
+      return
 
-          if self.currentProcess:
-            self.currentProcess.stop()
-            self.currentProcess = None
+    if (self.currentProcess) and (command is self.currentProcess.command):
+      log.info('This process is already running')
+      return
 
-          self.currentProcess = Process(command)
-          self.currentProcess.start()
+    if self.currentProcess:
+      self.currentProcess.stop()
+      self.currentProcess = None
 
-          self.lircSocket.close()
-          self.lircSocket = None
-      except KeyboardInterrupt:
-        break
+    self.currentProcess = Process(command)
+    self.currentProcess.start()
+
+  def _processLircMessage(self, data):
+    keyName = data.strip().split()[2]
+    log.info('Received IR key: %s', keyName)
+    command = self.commands.get(keyName)
+    self._runCommand(command)
+
+  def _disconnectFromLirc(self):
+    if not self.lircSocket:
+      return
 
     self.lircSocket.close()
+    self.lircSocket = None
 
-  def connectToLirc(self):
-    s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+  def _connectToLirc(self):
+    if self.lircSocket is not None:
+      return
+
+    self.lircSocket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     try:
-      s.connect('/var/run/lirc/lircd')
+      self.lircSocket.connect('/var/run/lirc/lircd')
     except socket.error:
-      s.close()
-      return None
-    select([], [s], [])
-    return s
+      self._disconnectFromLirc()
+      return
+    select([], [self.lircSocket], [])
 
 if __name__ == '__main__':
-  IrSwitchApp().run()
+  while True:
+    try:
+      IrSwitchApp().run()
+    except KeyboardInterrupt:
+      break
+    except:
+      log.exception('Unhandled exception')
 
