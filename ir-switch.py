@@ -14,9 +14,10 @@ handler.setFormatter(formatter)
 log.addHandler(handler)
 
 class Command(object):
-  def __init__(self, command, kill):
+  def __init__(self, command, kill, needsNine = False):
     self.command = command
     self.kill = kill
+    self.needsNine = needsNine
 
   def __str__(self):
     return self.command
@@ -35,16 +36,23 @@ class Process(object):
     if not self.proc:
       return
 
+    self._killChild()
+    log.info('Waiting for process death')
+    self.proc.wait()
+
+  def _killChild(self):
     log.info('Killing %s, pid = [%d]', self.command, self.proc.pid)
     pid = self._findPidToKill()
     if not pid:
       log.error('Failed to find pid to kill')
       return
 
-    log.info('Killing pid %s', pid)
-    subprocess.call('kill %s' % pid, shell = True)
-    log.info('Waiting for process death')
-    self.proc.wait()
+    killCmd = 'kill '
+    if self.command.needsNine:
+      killCmd += '-9 '
+    killCmd += pid
+    log.info('Running kill command: %s', killCmd)
+    subprocess.call(killCmd, shell = True)
 
   def _findPidToKill(self):
     log.info('Searching for Process to kill regex: %s', self.command.kill)
@@ -62,7 +70,7 @@ class IrSwitchApp(object):
     self.currentProcess = None
 
     self.commands = {
-      'KEY_BLUE' : Command('steam', '.local/share/Steam/.+/steam'), 
+      'KEY_BLUE' : Command('steam', '.local/share/Steam/.+/steam', needsNine = True), 
       'KEY_YELLOW': Command('xbmc', 'xbmc.bin'),
     }
 
