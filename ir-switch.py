@@ -10,79 +10,96 @@ class Command(object):
     self.command = command
     self.kill = kill
 
-commands = {
-  'KEY_BLUE' : Command('steam', '.local/share/Steam/.+/steam'), 
-  'KEY_YELLOW': Command('xbmc', 'xbmc.bin'),
-}
+  def __str__(self):
+    return self.command
 
-def connectToLirc():
-  s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-  try:
-    s.connect('/var/run/lirc/lircd')
-  except socket.error:
-    s.close()
-    return None
-  select([], [s], [])
-  return s
+class Process(object):
+  def __init__(self, command):
+    self.command = command
+    self.proc = None
 
-def killLastProcess():
-  global lastProcess, process
-  if lastProcess is None:
-    return
+  def start(self):
+    print('Running', self.command)
+    self.proc = subprocess.Popen(self.command.command, shell = True)
+    print('PID = %d' % self.proc.pid)
 
-  print('Killing', lastProcess.command, '[%d]' % process.pid)
-  print('Searching for Process to kill:', lastProcess.kill)
-  findProc = subprocess.Popen('ps -ef | grep -P "%s" | grep -v grep' % lastProcess.kill, shell = True, stdout = subprocess.PIPE)
-  findOut = findProc.communicate()[0]
-  if not findOut:
-    return
+  def stop(self):
+    if not self.proc:
+      return
 
-  print('Found proccess to kill:', findOut)
-  pid = findOut.split()[1]
-  print('Killing pid %s' % pid)
-  subprocess.call('kill %s' % pid, shell = True)
-  print('Waiting for process death')
-  process.wait()
-  process = None
-  lastProcess = None
+    print('Killing', self.command, '[%d]' % self.proc.pid)
+    print('Searching for Process to kill:', self.command.kill)
+    findProc = subprocess.Popen('ps -ef | grep -P "%s" | grep -v grep' % self.command.kill, shell = True, stdout = subprocess.PIPE)
+    findOut = findProc.communicate()[0]
+    if not findOut:
+      return
 
-lastProcess = None
-process = None
-lircSocket = None
-while True:
-  if not lircSocket:
-    lircSocket = connectToLirc()
-  if not lircSocket:
-    lircSocket.close()
-    lircSocket = None
-    time.sleep(1)
-    continue
-  
-  try:
-    readable, writable, exception = select([lircSocket], [], [])
-    if lircSocket in readable:
-      data = lircSocket.recv(1024)
-      if not data:
+    print('Found proccess to kill:', findOut)
+    pid = findOut.split()[1]
+    print('Killing pid %s' % pid)
+    subprocess.call('kill %s' % pid, shell = True)
+    print('Waiting for process death')
+    self.proc.wait()
+
+class IrSwitchApp(object):
+  def __init__(self):
+    self.lircSocket = None
+    self.currentProcess = None
+
+    self.commands = {
+      'KEY_BLUE' : Command('steam', '.local/share/Steam/.+/steam'), 
+      'KEY_YELLOW': Command('xbmc', 'xbmc.bin'),
+    }
+
+  def run(self):
+    while True:
+      if not self.lircSocket:
+        self.lircSocket = self.connectToLirc()
+      if not self.lircSocket:
+        self.lircSocket.close()
+        self.lircSocket = None
+        time.sleep(1)
+        continue
+      
+      try:
+        readable, writable, exception = select([self.lircSocket], [], [])
+        if self.lircSocket in readable:
+          data = self.lircSocket.recv(1024)
+          if not data:
+            break
+
+          data = data.strip().split()
+          keyName = data[2]
+          print('Received', keyName)
+          command = self.commands.get(keyName)
+          if (self.currentProcess) and (command is self.currentProcess.command):
+            print('Already running... go away')
+            continue
+
+          if self.currentProcess:
+            self.currentProcess.stop()
+            self.currentProcess = None
+
+          self.currentProcess = Process(command)
+          self.currentProcess.start()
+
+          self.lircSocket.close()
+          self.lircSocket = None
+      except KeyboardInterrupt:
         break
 
-      data = data.strip().split()
-      keyName = data[2]
-      print('Received', keyName)
-      command = commands.get(keyName)
-      if command is lastProcess:
-        print('Already running... go away')
-        continue
+    self.lircSocket.close()
 
-      killLastProcess()
+  def connectToLirc(self):
+    s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    try:
+      s.connect('/var/run/lirc/lircd')
+    except socket.error:
+      s.close()
+      return None
+    select([], [s], [])
+    return s
 
-      print('Running', command.command)
-      lastProcess = command
-      process = subprocess.Popen(command.command, shell = True)
-      print('PID = %d' % process.pid)
+if __name__ == '__main__':
+  IrSwitchApp().run()
 
-      lircSocket.close()
-      lircSocket = None
-  except KeyboardInterrupt:
-    break
-
-lircSocket.close()
