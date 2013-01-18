@@ -67,6 +67,9 @@ class IrSwitchApp(object):
     }
 
   def run(self):
+    self.currentProcess = Process(self.commands['KEY_YELLOW'])
+    self.currentProcess.start()
+
     while True:
       self._connectToLirc()
       if not self.lircSocket:
@@ -121,11 +124,10 @@ class IrSwitchApp(object):
     select([], [self.lircSocket], [])
 
 if __name__ == '__main__':
-  while True:
-    try:
-      IrSwitchApp().run()
-    except KeyboardInterrupt:
-      break
-    except:
-      log.exception('Unhandled exception')
+  try:
+    IrSwitchApp().run()
+  except KeyboardInterrupt:
+    pass
+  except:
+    log.exception('Unhandled exception')
 
