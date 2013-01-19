@@ -26,6 +26,7 @@ class Command:
 
   def run(self):
     if self.isRunning():
+      self.ostools.focus(self.process)
       return
 
     self.log.info('Running %s' % self)

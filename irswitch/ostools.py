@@ -27,3 +27,6 @@ class OsTools:
     self.log.debug('Killing pid %s', str(pid))
     subprocess.call('kill -9 %s' % str(pid), shell = True)
 
+  def focus(self, process):
+    self.log.info('Setting focus to %s' % process)
+    subprocess.call('wmctrl -a %s' % process, shell = True)

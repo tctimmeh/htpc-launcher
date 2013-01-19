@@ -9,8 +9,7 @@ class ProcessManager:
     if self._isNewCommand(command):
       self._stopAndClearLastCommand()
 
-    if self._shouldRun(command):
-      self._runAndSetCommand(command)
+    self._runAndSetCommand(command)
 
   def _stopAndClearLastCommand(self):
     self.lastCommand.stop()
@@ -23,10 +22,3 @@ class ProcessManager:
   def _isNewCommand(self, command):
    return (self.lastCommand is not None) and (self.lastCommand != command)
 
-  def _shouldRun(self, command):
-    if self.lastCommand is None:
-      return True
-    if not command.isRunning():
-      self.log.warn('%s is shutdown or crashed - restarting' % command)
-      return True
-    return False

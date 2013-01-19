@@ -39,3 +39,7 @@ class TestCommand:
     self.command.stop()
     self.ostools.kill.assert_called_with(self.pid)
 
+  def testFocusCalledWhenProcessAlreadyRunning(self):
+    self.ostools.findPid.return_value = self.pid
+    self.command.run()
+    assert self.ostools.focus.called
