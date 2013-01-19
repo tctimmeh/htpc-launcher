@@ -1,4 +1,5 @@
 from irswitch.command import Command
+from irswitch.ostools import OsTools
 from irswitch.processManager import ProcessManager
 from mock import Mock
 
@@ -25,3 +26,10 @@ class TestProcessManager:
     self.processManager.execute(self.command)
     self.processManager.execute(self.command)
     assert self.command.run.call_count == 1
+
+  def testCommandIsRerunIfNotRunning(self):
+    self.processManager.execute(self.command)
+    self.command.isRunning.return_value = False
+    self.processManager.execute(self.command)
+    assert self.command.run.call_count == 2
+

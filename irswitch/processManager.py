@@ -1,19 +1,16 @@
+import logging
+
 class ProcessManager:
-  def __init__(self):
+  def __init__(self, ostools = None):
+    self.log = logging.getLogger('ProcessManager')
     self.lastCommand = None
 
   def execute(self, command):
-    if self._lastCommandSet() and (not self._commandSameAsLastCommand(command)):
+    if self._isNewCommand(command):
       self._stopAndClearLastCommand()
 
-    if not self._lastCommandSet():
+    if self._shouldRun(command):
       self._runAndSetCommand(command)
-
-  def _commandSameAsLastCommand(self, command):
-    return command == self.lastCommand
-
-  def _lastCommandSet(self):
-    return self.lastCommand
 
   def _stopAndClearLastCommand(self):
     self.lastCommand.stop()
@@ -22,3 +19,14 @@ class ProcessManager:
   def _runAndSetCommand(self, command):
     command.run()
     self.lastCommand = command
+
+  def _isNewCommand(self, command):
+   return (self.lastCommand is not None) and (self.lastCommand != command)
+
+  def _shouldRun(self, command):
+    if self.lastCommand is None:
+      return True
+    if not command.isRunning():
+      self.log.warn('%s is shutdown or crashed - restarting' % command)
+      return True
+    return False

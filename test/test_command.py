@@ -1,3 +1,4 @@
+import threading
 from irswitch.command import Command
 from irswitch.ostools import OsTools
 from mock import Mock
@@ -11,7 +12,11 @@ class TestCommand:
 
   def testCommandIsRun(self):
     self.ostools.findPid.return_value = None
-    self.command.run()
+    run = threading.Thread(target = self.command.run)
+    run.start()
+    self.ostools.findPid.return_value = 123
+    run.join()
+
     self.ostools.runProcess.assert_called_with('something')
 
   def testPidIsKilledWhenStopped(self):
@@ -33,3 +38,4 @@ class TestCommand:
     self.command.needsKill = True
     self.command.stop()
     self.ostools.kill.assert_called_with(self.pid)
+
