@@ -19,6 +19,11 @@ class OsTools:
     self.log.debug('Found proccess: %s', findOut)
     return findOut.split()[1]
 
+  def terminate(self, pid):
+    self.log.debug('Terminating pid %s', str(pid))
+    subprocess.call('kill %s' % str(pid), shell = True)
+
   def kill(self, pid):
     self.log.debug('Killing pid %s', str(pid))
-    subprocess.call('kill %s' % str(pid), shell = True)
+    subprocess.call('kill -9 %s' % str(pid), shell = True)
+

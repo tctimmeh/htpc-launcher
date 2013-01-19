@@ -1,8 +1,9 @@
 from ostools import OsTools
 
 class Command:
-  def __init__(self, process, search = None, ostools = None):
+  def __init__(self, process, search = None, needsKill = False, ostools = None):
     self.process = process
+    self.needsKill = needsKill
 
     self.ostools = ostools
     if not self.ostools:
@@ -19,4 +20,8 @@ class Command:
     pid = self.ostools.findPid(self.search)
     if not pid:
       return
-    self.ostools.kill(pid)
+
+    if self.needsKill:
+      self.ostools.kill(pid)
+    else:
+      self.ostools.terminate(pid)
