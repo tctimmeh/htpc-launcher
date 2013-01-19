@@ -16,8 +16,12 @@ class ProcessManager:
     self.lastCommand = None
 
   def _runAndSetCommand(self, command):
-    command.run()
-    self.lastCommand = command
+    try:
+      command.run()
+      self.lastCommand = command
+    except:
+      self.log.error('Failed to run %s', command)
+      pass
 
   def _isNewCommand(self, command):
    return (self.lastCommand is not None) and (self.lastCommand != command)
