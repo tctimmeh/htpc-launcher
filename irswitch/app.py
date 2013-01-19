@@ -1,22 +1,22 @@
-import ConfigParser
 import time
+from irswitch.config import Config
 import os, logging, logging.handlers
 from irreader import IrReader, IrReaderError
-from command import Command
 from processManager import ProcessManager
 
 class IrSwitchApp:
   def __init__(self):
     self.startLogging()
+
+    self.config = Config()
+    self.config.load(open(os.path.expanduser('~/.ir-switch.conf')))
+
     self.irReader = IrReader()
     self.processManager = ProcessManager()
-    self.launch = None
-
-    self.commands = self._loadCommands(os.path.join(os.path.expanduser('~/.ir-switch.conf')))
 
   def run(self):
     try:
-      self._processIrCode(self.launch)
+      self._processIrCode(self.config.getLaunchCommand())
 
       while True:
         try:
@@ -53,28 +53,8 @@ class IrSwitchApp:
     self.startFileLogging()
 
   def _processIrCode(self, code):
-    command = self.commands.get(code)
+    command = self.config.getCommand(code)
     if not command:
       return
     self.processManager.execute(command)
-
-  def _loadCommands(self, configFilePath):
-    commands = {}
-
-    config = ConfigParser.RawConfigParser()
-    config.readfp(open(configFilePath))
-    for keyName in config.sections():
-      if keyName == 'startup':
-        if config.has_option(keyName, 'launch'):
-          self.launch = config.get(keyName, 'launch')
-        continue
-
-      command = Command(config.get(keyName, 'process'))
-      if config.has_option(keyName, 'search'):
-        command.search = config.get(keyName, 'search')
-      if config.has_option(keyName, 'needsKill'):
-        command.needsKill = config.getboolean(keyName, 'needsKill')
-      commands[keyName] = command
-
-    return commands
 

@@ -1,7 +1,7 @@
 import logging
 
 class ProcessManager:
-  def __init__(self, ostools = None):
+  def __init__(self):
     self.log = logging.getLogger('ProcessManager')
     self.lastCommand = None
 

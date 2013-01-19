@@ -1,5 +1,4 @@
 from irswitch.command import Command, CommandError
-from irswitch.ostools import OsTools
 from irswitch.processManager import ProcessManager
 from mock import Mock
 

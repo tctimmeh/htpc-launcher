@@ -1,4 +1,5 @@
 import threading
+import time
 from irswitch.command import Command, CommandError
 from irswitch.ostools import OsTools
 from mock import Mock
@@ -15,6 +16,7 @@ class TestCommand:
     self.ostools.findPid.return_value = None
     run = threading.Thread(target = self.command.run)
     run.start()
+    time.sleep(0.1)
     self.ostools.findPid.return_value = 123
     run.join()
 
