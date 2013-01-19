@@ -1,7 +1,8 @@
 import threading
-from irswitch.command import Command
+from irswitch.command import Command, CommandError
 from irswitch.ostools import OsTools
 from mock import Mock
+import pytest
 
 class TestCommand:
   def setup_method(self, method):
@@ -38,4 +39,10 @@ class TestCommand:
     self.command.needsKill = True
     self.command.stop()
     self.ostools.kill.assert_called_with(self.pid)
+
+  def testCommandErrorRaisedIfProgramFailsToStart(self):
+    self.command.startTimeout = 0
+    self.ostools.findPid.return_value = None
+    with pytest.raises(CommandError):
+      self.command.run()
 

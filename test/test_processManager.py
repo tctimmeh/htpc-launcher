@@ -1,4 +1,4 @@
-from irswitch.command import Command
+from irswitch.command import Command, CommandError
 from irswitch.ostools import OsTools
 from irswitch.processManager import ProcessManager
 from mock import Mock
@@ -32,4 +32,8 @@ class TestProcessManager:
     self.command.isRunning.return_value = False
     self.processManager.execute(self.command)
     assert self.command.run.call_count == 2
+
+  def testNoErrorRaisedIfCommandFailsToRun(self):
+    self.command.run.side_effect = CommandError()
+    self.processManager.execute(self.command)
 

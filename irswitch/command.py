@@ -1,11 +1,17 @@
 import logging, time
 from ostools import OsTools
 
+DEFAULT_COMMAND_TIMEOUT = 3
+
+class CommandError(Exception):
+  pass
+
 class Command:
-  def __init__(self, process, search = None, needsKill = False, ostools = None):
+  def __init__(self, process, search = None, needsKill = False, startTimeout = DEFAULT_COMMAND_TIMEOUT, ostools = None):
     self.log = logging.getLogger('Command')
     self.process = process
     self.needsKill = needsKill
+    self.startTimeout = startTimeout
 
     self.ostools = ostools
     if not self.ostools:
@@ -26,17 +32,19 @@ class Command:
 
   def run(self):
     if self.isRunning():
+      self.log.debug('%s already running', self)
       return
 
-    self.log.info('Running %s' % self)
+    self.log.info('Running %s', self)
     self.ostools.runProcess(self.process)
-    while not self.isRunning():
-      time.sleep(0.5)
+    self._waitForProcess()
 
   def stop(self):
     pid = self.ostools.findPid(self.search)
     if not pid:
       return
+
+    self.log.info('Stopping %s', self)
     if self.needsKill:
       self.ostools.kill(pid)
     else:
@@ -45,4 +53,12 @@ class Command:
   def isRunning(self):
     pid = self.ostools.findPid(self.search)
     return pid is not None
+
+  def _waitForProcess(self):
+    self.log.debug('Waiting for %s', self)
+    start = time.time()
+    while not self.isRunning():
+      time.sleep(0.5)
+      if (time.time() - start) > self.startTimeout:
+        raise CommandError()
 

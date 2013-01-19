@@ -17,8 +17,11 @@ class ProcessManager:
     self.lastCommand = None
 
   def _runAndSetCommand(self, command):
-    command.run()
-    self.lastCommand = command
+    try:
+      command.run()
+      self.lastCommand = command
+    except:
+      pass
 
   def _isNewCommand(self, command):
    return (self.lastCommand is not None) and (self.lastCommand != command)
