@@ -1,3 +1,4 @@
+import ConfigParser
 import time
 import os, logging, logging.handlers
 from irreader import IrReader, IrReaderError
@@ -10,10 +11,7 @@ class IrSwitchApp:
     self.irReader = IrReader()
     self.processManager = ProcessManager()
 
-    self.commands = {
-      'KEY_YELLOW': Command('xbmc', search = 'xbmc.bin'),
-      'KEY_BLUE': Command('steam', search = '.local/share/Steam/.+/steam', needsKill = True),
-    }
+    self.commands = self._loadCommands(os.path.join(os.path.expanduser('~/.ir-switch.conf')))
 
   def run(self):
     try:
@@ -32,8 +30,7 @@ class IrSwitchApp:
 
   def startFileLogging(self):
     formatter = logging.Formatter('%(asctime)s %(levelname)s - %(message)s')
-    homeDirectory = os.path.expanduser('~')
-    filePath = os.path.join(homeDirectory, '.ir-switch.log')
+    filePath = os.path.expanduser('~/.ir-switch.log')
 
     handler = logging.handlers.RotatingFileHandler(filePath, maxBytes = 1024000, backupCount = 5)
     handler.setFormatter(formatter)
@@ -57,4 +54,19 @@ class IrSwitchApp:
     if not command:
       return
     self.processManager.execute(command)
+
+  def _loadCommands(self, configFilePath):
+    commands = {}
+
+    config = ConfigParser.RawConfigParser()
+    config.readfp(open(configFilePath))
+    for keyName in config.sections():
+      command = Command(config.get(keyName, 'process'))
+      if config.has_option(keyName, 'search'):
+        command.search = config.get(keyName, 'search')
+      if config.has_option(keyName, 'needsKill'):
+        command.search = config.getboolean(keyName, 'needsKill')
+      commands[keyName] = command
+
+    return commands
 
