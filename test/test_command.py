@@ -25,8 +25,7 @@ class TestCommand:
     assert not self.ostools.kill.called
 
   def testNothingStartedWhenProcessAlreadyRunning(self):
-    pid = '1234'
-    self.ostools.findPid.return_value = pid
+    self.ostools.findPid.return_value = self.pid
     self.command.run()
     assert not self.ostools.runProcess.called
 
