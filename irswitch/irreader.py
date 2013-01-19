@@ -1,6 +1,9 @@
 import logging
 from socketreader import SocketReader
 
+class IrReaderError(Exception):
+  pass
+
 class IrReader:
   def __init__(self, socketReader = None):
     self.log = logging.getLogger('IrReader')
@@ -10,6 +13,9 @@ class IrReader:
 
   def getNextCode(self):
     self.socketReader.connect()
+    if not self.socketReader.isConnected():
+      raise IrReaderError()
+
     message = self.socketReader.read()
     if not message:
       return None

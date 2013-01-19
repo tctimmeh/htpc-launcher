@@ -7,6 +7,9 @@ class SocketReader:
     self.address = address
     self.socket = None
 
+  def isConnected(self):
+    return self.socket is not None
+
   def connect(self):
     if self.socket is not None:
       return
@@ -15,7 +18,6 @@ class SocketReader:
       self.socket.connect(self.address)
     except socket.error:
       self.disconnect()
-      return
     select([], [self.socket], [])
     self.log.debug('Conencted to %s', self.address)
 

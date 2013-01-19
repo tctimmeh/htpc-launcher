@@ -1,11 +1,14 @@
-from irswitch.irreader import IrReader
+from irswitch.irreader import IrReader, IrReaderError
 from irswitch.socketreader import SocketReader
+import pytest
 from mock import Mock
 
 class TestIrReader:
   def setup_method(self, method):
     self.socketReader = Mock(SocketReader)
     self.socketReader.read.return_value = None
+    self.socketReader.isConnected.return_value = True
+
     self.reader = IrReader(self.socketReader)
 
   def testGettingCodeConnectsToSocket(self):
@@ -18,3 +21,8 @@ class TestIrReader:
 
     code = self.reader.getNextCode()
     assert code == expected
+
+  def testIrReaderFailureRaisesException(self):
+    self.socketReader.isConnected.return_value = False
+    with pytest.raises(IrReaderError):
+      self.reader.getNextCode()
