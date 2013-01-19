@@ -12,20 +12,23 @@ class IrSwitchApp:
 
     self.commands = {
       'KEY_YELLOW': Command('xbmc', search = 'xbmc.bin'),
-      'KEY_BLUE': Command('steam', search = '.local/share/Steam/.+/steam'),
+      'KEY_BLUE': Command('steam', search = '.local/share/Steam/.+/steam', needsKill = True),
     }
 
   def run(self):
-    while True:
-      try:
+    try:
+      while True:
         try:
-          code = self.irReader.getNextCode()
-        except IrReaderError:
-          time.sleep(5)
-          continue
-        self._processIrCode(code)
-      except KeyboardInterrupt:
-        break
+          try:
+            code = self.irReader.getNextCode()
+          except IrReaderError:
+            time.sleep(5)
+            continue
+          self._processIrCode(code)
+        except KeyboardInterrupt:
+          break
+    except:
+      self.log.exception('Unhandled exception')
 
   def startFileLogging(self):
     formatter = logging.Formatter('%(asctime)s %(levelname)s - %(message)s')
@@ -50,7 +53,7 @@ class IrSwitchApp:
     self.startFileLogging()
 
   def _processIrCode(self, code):
-    command = self.commands[code]
+    command = self.commands.get(code)
     if not command:
       return
     self.processManager.execute(command)
