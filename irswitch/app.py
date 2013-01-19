@@ -1,11 +1,17 @@
 import time
 import os, logging, logging.handlers
 from irreader import IrReader, IrReaderError
+from command import Command
 
 class IrSwitchApp:
   def __init__(self):
     self.startLogging()
     self.irReader = IrReader()
+
+    self.commands = {
+      'KEY_YELLOW': Command('xbmc'),
+      'KEY_BLUE': Command('steam'),
+    }
 
   def run(self):
     while True:
@@ -42,5 +48,9 @@ class IrSwitchApp:
 #    self.startFileLogging()
 
   def _processIrCode(self, code):
+    command = self.commands[code]
+    if not command:
+      return
+    command.run()
     pass
 
