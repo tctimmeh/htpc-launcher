@@ -6,6 +6,7 @@ class OsTools:
     self.log = logging.getLogger('os')
 
   def runProcess(self, command):
+    self.log.info('Running process: %s', command)
     return subprocess.Popen(command, shell = True)
 
   def findPid(self, regex):
