@@ -10,11 +10,14 @@ class IrSwitchApp:
     self.startLogging()
     self.irReader = IrReader()
     self.processManager = ProcessManager()
+    self.launch = None
 
     self.commands = self._loadCommands(os.path.join(os.path.expanduser('~/.ir-switch.conf')))
 
   def run(self):
     try:
+      self._processIrCode(self.launch)
+
       while True:
         try:
           try:
@@ -61,6 +64,11 @@ class IrSwitchApp:
     config = ConfigParser.RawConfigParser()
     config.readfp(open(configFilePath))
     for keyName in config.sections():
+      if keyName == 'startup':
+        if config.has_option(keyName, 'launch'):
+          self.launch = config.get(keyName, 'launch')
+        continue
+
       command = Command(config.get(keyName, 'process'))
       if config.has_option(keyName, 'search'):
         command.search = config.get(keyName, 'search')
