@@ -17,7 +17,9 @@ class SocketReader:
     try:
       self.socket.connect(self.address)
     except socket.error:
+      self.log.error('Failed to connect to %s', self.address)
       self.disconnect()
+      return
     select([], [self.socket], [])
     self.log.debug('Conencted to %s', self.address)
 

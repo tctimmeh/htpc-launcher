@@ -1,5 +1,6 @@
+import time
 import os, logging, logging.handlers
-from irreader import IrReader
+from irreader import IrReader, IrReaderError
 
 class IrSwitchApp:
   def __init__(self):
@@ -8,8 +9,15 @@ class IrSwitchApp:
 
   def run(self):
     while True:
-      code = self.irReader.getNextCode()
-      self._processIrCode(code)
+      try:
+        try:
+          code = self.irReader.getNextCode()
+        except IrReaderError:
+          time.sleep(5)
+          continue
+        self._processIrCode(code)
+      except KeyboardInterrupt:
+        break
 
   def startFileLogging(self):
     formatter = logging.Formatter('%(asctime)s %(levelname)s - %(message)s')
