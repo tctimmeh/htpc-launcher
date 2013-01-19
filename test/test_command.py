@@ -8,6 +8,7 @@ class TestCommand:
     self.command = Command('something', search = 'whatever', ostools = self.ostools)
 
   def testCommandIsRun(self):
+    self.ostools.findPid.return_value = None
     self.command.run()
     self.ostools.runProcess.assert_called_with('something')
 
@@ -21,3 +22,9 @@ class TestCommand:
     self.ostools.findPid.return_value = None
     self.command.stop()
     assert not self.ostools.kill.called
+
+  def testNothingStartedWhenProcessAlreadyRunning(self):
+    pid = '1234'
+    self.ostools.findPid.return_value = pid
+    self.command.run()
+    assert not self.ostools.runProcess.called

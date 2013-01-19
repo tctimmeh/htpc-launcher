@@ -13,7 +13,9 @@ class Command:
       self.search = self.process
 
   def run(self):
-    self.ostools.runProcess(self.process)
+    pid = self.ostools.findPid(self.search)
+    if not pid:
+      self.ostools.runProcess(self.process)
 
   def stop(self):
     pid = self.ostools.findPid(self.search)
