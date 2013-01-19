@@ -65,7 +65,7 @@ class IrSwitchApp:
       if config.has_option(keyName, 'search'):
         command.search = config.get(keyName, 'search')
       if config.has_option(keyName, 'needsKill'):
-        command.search = config.getboolean(keyName, 'needsKill')
+        command.needsKill = config.getboolean(keyName, 'needsKill')
       commands[keyName] = command
 
     return commands
