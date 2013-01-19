@@ -53,7 +53,7 @@ class IrSwitchApp:
     self.startFileLogging()
 
   def _processIrCode(self, code):
-    command = self.commands[code]
+    command = self.commands.get(code)
     if not command:
       return
     self.processManager.execute(command)
