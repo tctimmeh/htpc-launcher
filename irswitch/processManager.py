@@ -5,6 +5,8 @@ class ProcessManager:
   def execute(self, command):
     if self.currentCommand and (self.currentCommand != command):
       self.currentCommand.stop()
+      self.currentCommand = None
 
-    command.run()
-    self.currentCommand = command
+    if not self.currentCommand:
+      command.run()
+      self.currentCommand = command
