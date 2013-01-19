@@ -10,3 +10,8 @@ class TestProcessManager:
   def testCommandIsRunWhenExecuted(self):
     self.processManager.execute(self.command)
     assert self.command.run.called
+
+  def testPreviousCommandIsStoppedWhenStartingNewCommand(self):
+    self.processManager.execute(self.command)
+    self.processManager.execute(Mock(Command))
+    assert self.command.stop.called
