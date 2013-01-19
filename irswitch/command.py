@@ -22,3 +22,9 @@ class Command:
     if not pid:
       return
     self.ostools.kill(pid)
+
+  def __eq__(self, other):
+    return self.process == other.process
+
+  def __ne__(self, other):
+    return not self == other

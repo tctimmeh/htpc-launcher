@@ -3,7 +3,7 @@ class ProcessManager:
     self.currentCommand = None
 
   def execute(self, command):
-    if self.currentCommand:
+    if self.currentCommand and (self.currentCommand != command):
       self.currentCommand.stop()
 
     command.run()

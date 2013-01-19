@@ -15,3 +15,8 @@ class TestProcessManager:
     self.processManager.execute(self.command)
     self.processManager.execute(Mock(Command))
     assert self.command.stop.called
+
+  def testCommandIsNotStoppedIfSameAsPreviousCommand(self):
+    self.processManager.execute(self.command)
+    self.processManager.execute(self.command)
+    assert not self.command.stop.called
