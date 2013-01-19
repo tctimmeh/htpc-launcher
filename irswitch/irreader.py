@@ -12,7 +12,7 @@ class IrReader:
     self.socketReader.connect()
     message = self.socketReader.read()
 
-    self.log.debug('Read from lircd: %s', message)
+    self.log.debug('Read from lircd: %s', message.strip())
 
     return self._getKeyNameFromMessage(message)
 

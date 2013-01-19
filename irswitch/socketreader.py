@@ -1,8 +1,9 @@
-import socket
+import socket, logging
 from select import select
 
 class SocketReader:
   def __init__(self, address):
+    self.log = logging.getLogger('SocketReader')
     self.address = address
     self.socket = None
 
@@ -16,11 +17,13 @@ class SocketReader:
       self.disconnect()
       return
     select([], [self.socket], [])
+    self.log.debug('Conencted to %s', self.address)
 
   def read(self):
     readable, writable, exception = select([self.socket], [], [])
     data = self.socket.recv(1024)
     if not data:
+      self.log.debug('Socket connection terminated')
       self.disconnect()
       return None
     return data

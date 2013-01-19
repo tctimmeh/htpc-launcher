@@ -28,7 +28,7 @@ class IrSwitchApp:
 
   def startLogging(self):
     self.log = logging.getLogger()
-    self.log.setLevel(logging.INFO)
+    self.log.setLevel(logging.DEBUG)
 
     self.startStreamLogging()
 #    self.startFileLogging()
