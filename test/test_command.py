@@ -44,6 +44,7 @@ class TestCommand:
 
   def testFocusCalledWhenProcessAlreadyRunning(self):
     self.ostools.findPid.return_value = self.pid
+    self.ostools.doesWindowExist('something').return_value = True
     self.command.run()
     assert self.ostools.focus.called
 
@@ -52,4 +53,24 @@ class TestCommand:
     self.ostools.findPid.return_value = None
     with pytest.raises(CommandError):
       self.command.run()
+
+  def testCheckForWindowIsCalledIfProcessIsRunning(self):
+    self.ostools.findPid.return_value = self.pid
+    self.command.run()
+    self.ostools.doesWindowExist.assert_called_with('something')
+
+  def testCommandTerminatedIfNoWindowExists(self):
+    self.ostools.findPid.return_value = self.pid
+    self.ostools.doesWindowExist.return_value = False
+    self.command.run()
+    assert self.ostools.terminate.called
+
+  def testCommandStartedIfNoWindowExists(self):
+    self.ostools.findPid.return_value = self.pid
+    self.ostools.doesWindowExist.return_value = False
+    run = threading.Thread(target = self.command.run)
+    run.start()
+    time.sleep(0.1)
+    run.join()
+    self.ostools.runProcess.assert_called_with('something')
 

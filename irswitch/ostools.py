@@ -30,3 +30,11 @@ class OsTools:
   def focus(self, process):
     self.log.info('Setting focus to %s' % process)
     subprocess.call('wmctrl -a %s' % process, shell = True)
+
+  def doesWindowExist(self, window):
+    try:
+      # grep will have an exit status of 1 if no rows are found, which leads check_output to raise an error
+      subprocess.check_output("wmctrl -l|grep -i %s" % window, shell=True)
+      return True
+    except:
+      return False

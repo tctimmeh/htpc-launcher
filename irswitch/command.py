@@ -32,9 +32,13 @@ class Command:
 
   def run(self):
     if self.isRunning():
-      self.log.debug('%s already running, setting focus', self)
-      self.ostools.focus(self.process)
-      return
+      if self.ostools.doesWindowExist(self.process):
+        self.log.debug('%s already running, setting focus', self)
+        self.ostools.focus(self.process)
+        return
+      else:
+        self.log.debug('%s is already running, but has no window; restarting process', self)
+        self.stop()
 
     self.log.info('Running %s', self)
     self.ostools.runProcess(self.process)
