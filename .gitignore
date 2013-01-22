@@ -1,1 +1,6 @@
+*.egg
+*.gz
+*.pyc
+*.sw[op]
+build
 venv
