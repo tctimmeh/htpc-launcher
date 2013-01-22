@@ -58,3 +58,6 @@ class IrSwitchApp:
       return
     self.processManager.execute(command)
 
+def main():
+  IrSwitchApp().run()
+
