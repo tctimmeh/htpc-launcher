@@ -7,8 +7,8 @@ from setuptools import setup, find_packages
 
 setup(
   name = "htpc-launcher",
-  version = "1.0",
-  packages = find_packages(),
+  version = "1.0.0",
+  packages = ['irswitch'],
 
   author = "Tim Court",
   author_email = "tctimmeh@gmail.com",

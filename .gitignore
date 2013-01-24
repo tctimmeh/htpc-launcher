@@ -1,6 +1,9 @@
 *.egg
+*.egg-info
 *.gz
 *.pyc
 *.sw[op]
 build
+MANIFEST
 venv
+

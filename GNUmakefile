@@ -8,9 +8,11 @@ test: venv
 clean:
 	@find . -name \*.pyc | xargs rm -f
 	@rm -f distribute-*
-	@rm -rf *.egg-info
-	@rm -rf build
+	@rm -rf build dist *.egg-info
 	
+upload: clean
+	./setup.py sdist register upload
+
 venv:
 	virtualenv venv
 	. $(VENV_DIR)/bin/activate && pip install pytest mock
