@@ -15,5 +15,5 @@ upload: clean
 
 venv:
 	virtualenv venv
-	. $(VENV_DIR)/bin/activate && pip install pytest mock
+	. $(VENV_DIR)/bin/activate && pip install pytest mock sphinx
 
