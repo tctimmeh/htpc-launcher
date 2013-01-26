@@ -11,6 +11,7 @@ setup(
   name = PROJECT_NAME,
   version = VERSION,
   packages = ['htpclauncher'],
+  py_modules = ['distribute_setup'],
 
   author = "Tim Court",
   author_email = "tctimmeh@gmail.com",
