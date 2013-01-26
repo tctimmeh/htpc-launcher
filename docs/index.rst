@@ -10,10 +10,6 @@ For example, if |appName| is configured for `XBMC <http://xbmc.org/>`_ and `Stea
 then pressing the configured LIRC key for XBMC will launch that program. Next, if the button for Steam is pressed,
 |appName| will shut down XBMC and launch Steam.
 
-This document describes how to install, configure, and use |appName|.
-
-Contents:
-
 .. toctree::
    :maxdepth: 2
 

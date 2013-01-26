@@ -20,4 +20,4 @@ venv:
 	. $(VENV_DIR)/bin/activate && pip install pytest mock sphinx
 
 doc:
-	cd docs && $(MAKE) html
+	cd docs && $(MAKE) html man

@@ -21,13 +21,11 @@ Activate the virtual environment with by running this command from the project r
 
 :command:`. venv/bin/activate`
 
-.. note::
+For reference, the following third-party libraries are required to test and/or build |appName|:
 
-   For reference, the following third-party libraries are required to test and/or build |appName|:
-
-   * pytest
-   * mock
-   * sphinx
+  * pytest
+  * mock
+  * sphinx
 
 Executing the Tests
 -------------------

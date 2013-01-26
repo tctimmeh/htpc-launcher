@@ -229,8 +229,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'htpc-launcher', u'htpc-launcher Documentation',
-     [u'Tim Court'], 1)
+    ('index', htpclauncher.LAUNCH_SCRIPT, u'%s Documentation' % htpclauncher.APP_NAME, [u'Tim Court - tctimmeh@gmail.com'], 1)
 ]
 
 # If true, show URL addresses after external links.
