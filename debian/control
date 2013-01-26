@@ -1,0 +1,19 @@
+Source: htpc-launcher
+Section: video
+Priority: extra
+Maintainer: Tim Court <tctimmeh@gmail.com>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.3
+Homepage: http://htpc-launcher.readthedocs.org/
+Vcs-Git: http://github.com/tctimmeh/htpc-launcher
+
+Package: htpc-launcher
+Architecture: all
+Depends: ${misc:Depends}, python-minimal, lirc
+Description: Launch, and switch between, full-screen applications
+ HTPC Launcher is a program for launching full-screen applications. It is 
+ designed for use in an environment where only one of several 
+ resource-intensive applications should be run at once. HTPC Launcher 
+ responds to LIRC key presses by starting a configured application and 
+ stopping any others that may still be running.
+

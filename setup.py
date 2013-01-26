@@ -12,6 +12,9 @@ setup(
   version = VERSION,
   packages = ['htpclauncher'],
   py_modules = ['distribute_setup'],
+  package_data = {
+    'makefile': ['GNUmakefile'],
+  },
 
   author = "Tim Court",
   author_email = "tctimmeh@gmail.com",

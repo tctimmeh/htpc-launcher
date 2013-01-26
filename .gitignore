@@ -1,9 +1,13 @@
+*.changes
+*.deb
+*.dsc
 *.egg
 *.egg-info
 *.gz
 *.pyc
 *.sw[op]
 build
+htpc-launcher-*
 MANIFEST
 venv
 
