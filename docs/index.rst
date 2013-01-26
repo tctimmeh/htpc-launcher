@@ -1,16 +1,16 @@
-HTPC Launcher
+|appName|
 =============
 
-HTPC Launcher is a program for launching full-screen applications. It is designed for use in an environment where only
-one of several resource-intensive applications should be run at once. HTPC Launcher responds to
+|appName| is a program for launching full-screen applications. It is designed for use in an environment where only
+one of several resource-intensive applications should be run at once. |appName| responds to
 LIRC [#lirc]_ key presses by starting a configured application and stopping any others that may
 still be running.
 
-For example, if HTPC Launcher is configured for `XBMC <http://xbmc.org/>`_ and `Steam <http://steampowered.com/>`_,
+For example, if |appName| is configured for `XBMC <http://xbmc.org/>`_ and `Steam <http://steampowered.com/>`_,
 then pressing the configured LIRC key for XBMC will launch that program. Next, if the button for Steam is pressed,
-HTPC Launcher will shut down XBMC and launch Steam.
+|appName| will shut down XBMC and launch Steam.
 
-This document describes how to install, configure, and use HTPC Launcher.
+This document describes how to install, configure, and use |appName|.
 
 Contents:
 
@@ -23,23 +23,23 @@ Contents:
 Installation
 ------------
 
-Install HTPC Launcher using :program:`pip`:
+Install |appName| using :program:`pip`:
 
-:command:`pip install htpc-launcher`
+  $ pip install |projName|
 
 Usage
 -----
 
-Configure HTPC Launcher by creating a configuration file as described in :doc:`configure`. HTPC Launcher will not run
+Configure |appName| by creating a configuration file as described in :doc:`configure`. |appName| will not run
 without a configuration file.
 
-Run HTPC Launcher by executing:
+Run |appName| by executing:
 
-:command:`htpc-launch`
+  $ |runCmd|
 
-HTPC Launcher will respond to LIRC codes by starting and stopping your configured applications.
+|appName| will respond to LIRC codes by starting and stopping your configured applications.
 
-Inspect the run-time log file to diagnose any problems. The log file is located in :file:`~/.ir-switch.log`.
+Inspect the run-time log file to diagnose any problems. The log file is located in |logFile|.
 
 .. rubric:: Footnotes
 

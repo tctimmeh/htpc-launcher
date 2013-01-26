@@ -1,5 +1,5 @@
-from irswitch.command import Command, CommandError
-from irswitch.processManager import ProcessManager
+from htpclauncher.command import Command, CommandError
+from htpclauncher.processManager import ProcessManager
 from mock import Mock
 
 class TestProcessManager:

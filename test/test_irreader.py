@@ -1,5 +1,5 @@
-from irswitch.irreader import IrReader, IrReaderError
-from irswitch.socketreader import SocketReader
+from htpclauncher.irreader import IrReader, IrReaderError
+from htpclauncher.socketreader import SocketReader
 import pytest
 from mock import Mock
 

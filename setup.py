@@ -3,12 +3,14 @@
 from distribute_setup import use_setuptools
 use_setuptools()
 
-from setuptools import setup, find_packages
+from setuptools import setup
+
+from htpclauncher import PROJECT_NAME, VERSION, LAUNCH_SCRIPT
 
 setup(
-  name = "htpc-launcher",
-  version = "1.0.0",
-  packages = ['irswitch'],
+  name = PROJECT_NAME,
+  version = VERSION,
+  packages = ['htpclauncher'],
 
   author = "Tim Court",
   author_email = "tctimmeh@gmail.com",
@@ -25,7 +27,7 @@ setup(
 
   entry_points = {
     'console_scripts': [
-      'htpc-launch = irswitch.app:main',
+      '%s = htpclauncher.app:main' % LAUNCH_SCRIPT,
     ],
   }
 )

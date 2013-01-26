@@ -1,7 +1,7 @@
 import threading
 import time
-from irswitch.command import Command, CommandError
-from irswitch.ostools import OsTools
+from htpclauncher.command import Command, CommandError
+from htpclauncher.ostools import OsTools
 from mock import Mock
 import pytest
 

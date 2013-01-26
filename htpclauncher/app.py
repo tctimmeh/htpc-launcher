@@ -1,15 +1,17 @@
 import time
-from irswitch.config import Config
+from htpclauncher.config import Config
 import os, logging, logging.handlers
 from irreader import IrReader, IrReaderError
 from processManager import ProcessManager
+
+from . import DEFAULT_CONF_FILE, DEFAULT_LOG_FILE
 
 class IrSwitchApp:
   def __init__(self):
     self.startLogging()
 
     self.config = Config()
-    self.config.load(open(os.path.expanduser('~/.ir-switch.conf')))
+    self.config.load(open(os.path.expanduser(DEFAULT_CONF_FILE)))
 
     self.irReader = IrReader()
     self.processManager = ProcessManager()
@@ -33,7 +35,7 @@ class IrSwitchApp:
 
   def startFileLogging(self):
     formatter = logging.Formatter('%(asctime)s %(levelname)s - %(message)s')
-    filePath = os.path.expanduser('~/.ir-switch.log')
+    filePath = os.path.expanduser(DEFAULT_LOG_FILE)
 
     handler = logging.handlers.RotatingFileHandler(filePath, maxBytes = 1024000, backupCount = 5)
     handler.setFormatter(formatter)

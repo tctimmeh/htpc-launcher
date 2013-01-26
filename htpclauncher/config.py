@@ -1,5 +1,5 @@
 import ConfigParser
-from irswitch.command import Command
+from htpclauncher.command import Command
 
 class Config:
   def __init__(self):

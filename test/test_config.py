@@ -1,5 +1,5 @@
 from StringIO import StringIO
-from irswitch.config import Config
+from htpclauncher.config import Config
 
 class TestConfig:
   def setup_method(self, method):
