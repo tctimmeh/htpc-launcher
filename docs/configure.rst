@@ -1,8 +1,8 @@
 Configuration
 =============
 
-|appName| requires configuration before use. It looks for a configuration file called |confFile| in
-the user's home directory.
+|appName| requires configuration before use. It looks first for a file called . |confFile| in
+the user's home directory, then for /etc/|confFile|. If none of those can be found the program exits immediately.
 
 The configuration file must be formatted according to the rules for the python `Config Parser`_ module. It consists of
 sections denoted by headers in square brackets (``[]``) which contain a series of name/value pairs for each
