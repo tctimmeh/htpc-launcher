@@ -61,9 +61,28 @@ Build this documentation by running the following command from the project root 
 
 :command:`make doc`
 
-or this command from the :file:`docs` directory:
+To build only the HTML or man page, run :command:`make html` or :command:`make man` respectively from the :file:`docs`
+directory.
 
-:command:`make html`
+Making a New Release
+--------------------
+
+Follow these steps to release a new version:
+
+1. Increment the product version number
+
+  * Increment the release number if only bug fixes were made, the minor number if new features were added, or the major
+    number if changes have broken backwards compatibility.
+
+2. Tag the code with the new version number
+
+3. Update the release notes by changing the 1.x label to the new version number. Create a new 1.x label.
+
+4. Upload the new version to the Python Package Index by running :command:`make upload`
+
+5. If any documentation was changed since the previous release, move the ``doc-latest`` branch to match the latest
+   tagged release
 
 .. _virtualenv: http://www.virtualenv.org/
 .. _Distribute: http://packages.python.org/distribute/
+

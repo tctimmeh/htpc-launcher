@@ -15,6 +15,7 @@ then pressing the configured LIRC key for XBMC will launch that program. Next, i
 
    configure
    contrib
+   history
 
 Installation
 ------------

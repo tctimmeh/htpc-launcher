@@ -19,5 +19,5 @@ venv:
 	virtualenv venv
 	. $(VENV_DIR)/bin/activate && pip install pytest mock sphinx
 
-doc:
-	cd docs && $(MAKE) html man
+doc: venv
+	. $(VENV_DIR)/bin/activate && cd docs && $(MAKE) html man
