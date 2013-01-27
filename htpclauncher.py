@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from htpclauncher import IrSwitchApp
+from htpclauncher import HtpcLauncherApp
 
 if __name__ == '__main__':
-  IrSwitchApp().run()
+  HtpcLauncherApp().run()

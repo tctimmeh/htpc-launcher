@@ -1,4 +1,5 @@
 import logging
+import os
 import subprocess
 
 class OsTools:
@@ -38,3 +39,17 @@ class OsTools:
       return True
     except:
       return False
+
+  def openFile(self, path):
+    try:
+      return open(path)
+    except IOError as e:
+      self.log.error('Failed to open file: %s', e)
+      return None
+
+  def openUserFile(self, fileName):
+    return self.openFile(os.path.expanduser(os.path.join('~', fileName)))
+
+  def openSystemConfFile(self, fileName):
+    return self.openFile(os.path.join('/', 'etc', fileName))
+
