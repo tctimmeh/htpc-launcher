@@ -32,7 +32,7 @@ class IrReader:
     # from http://lirc.org/html/technical.html#applications
     # format of an lircd message is: <code> <repeat count> <button name> <remote control name>
     (code, repeatCount, buttonName, remoteName) = message.split()
-    if int(repeatCount) > 0:
+    if int(repeatCount, 16) > 0:
       return None
     return buttonName
 

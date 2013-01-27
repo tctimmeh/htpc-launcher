@@ -23,7 +23,7 @@ class TestIrReader:
     assert code == self.keyName
 
   def testGettingCodeSkipsKeyRepeats(self):
-    self.socketReader.read.return_value = '0x12345678 01 KEY_BAD REMOTE_NAME\n' + self.lircMessage
+    self.socketReader.read.return_value = '0x12345678 0a KEY_BAD REMOTE_NAME\n' + self.lircMessage
 
     code = self.reader.getNextCode()
     assert code == self.keyName
