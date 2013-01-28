@@ -53,3 +53,6 @@ class OsTools:
   def openSystemConfFile(self, fileName):
     return self.openFile(os.path.join('/', 'etc', fileName))
 
+  def getRotatingLogHandler(self, file, mode = 'a', maxBytes = 0, backupCount = 0, encoding = None, delay = 0):
+    return logging.handlers.RotatingFileHandler(file, mode = mode, maxBytes = maxBytes, backupCount = backupCount,
+      encoding = encoding, delay = delay)

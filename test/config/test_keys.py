@@ -4,8 +4,6 @@ from htpclauncher.config import Config
 class TestConfig:
   def setup_method(self, method):
     self.contents = StringIO('''
-[startup]
-launch = LAUNCH_KEY
 [KEY_NAME]
 process = processName
 search = searchString
@@ -28,7 +26,4 @@ needsKill = true
 
   def testCommandsLoadedWithCorrectKillFlagWhenTrue(self):
     assert self.config.getCommand('KILL_NAME').needsKill == True
-
-  def testAutoLaunchKeyIsLoaded(self):
-    assert self.config.getLaunchCommand() == 'LAUNCH_KEY'
 

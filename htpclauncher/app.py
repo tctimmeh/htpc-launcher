@@ -9,8 +9,6 @@ from . import DEFAULT_CONF_FILE, DEFAULT_LOG_FILE
 
 class HtpcLauncherApp:
   def __init__(self, ostools = None, config = None):
-    self._startLogging()
-
     self.ostools = ostools
     if not self.ostools:
       self.ostools = OsTools()
@@ -19,7 +17,9 @@ class HtpcLauncherApp:
     if not self.config:
       self.config = Config()
 
+    self._startLogging()
     self._loadConfig()
+    self._startFileLogging()
 
     self.irReader = IrReader()
     self.processManager = ProcessManager()
@@ -45,22 +45,15 @@ class HtpcLauncherApp:
     formatter = logging.Formatter('%(asctime)s %(levelname)s - %(message)s')
     filePath = os.path.expanduser(DEFAULT_LOG_FILE)
 
-    handler = logging.handlers.RotatingFileHandler(filePath, maxBytes = 1024000, backupCount = 5)
-    handler.setFormatter(formatter)
-    self.log.addHandler(handler)
-
-  def _startStreamLogging(self):
-    formatter = logging.Formatter('%(asctime)s %(levelname)s - %(message)s')
-    handler = logging.StreamHandler()
+    self.log.info('Logging to %s', self.config.getLogPath())
+    handler = self.ostools.getRotatingLogHandler(self.config.getLogPath(), maxBytes = 1024000, backupCount = 5)
     handler.setFormatter(formatter)
     self.log.addHandler(handler)
 
   def _startLogging(self):
     self.log = logging.getLogger()
     self.log.setLevel(logging.DEBUG)
-
-    self._startStreamLogging()
-    self._startFileLogging()
+    self.log.addHandler(logging.StreamHandler())
 
   def _loadConfig(self):
     self.log.info('Loading config file from home directory')

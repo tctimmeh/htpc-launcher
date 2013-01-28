@@ -21,7 +21,7 @@ class SocketReader:
       self.disconnect()
       return
     select([], [self.socket], [])
-    self.log.debug('Conencted to %s', self.address)
+    self.log.debug('Connected to %s', self.address)
 
   def read(self):
     readable, writable, exception = select([self.socket], [], [])
