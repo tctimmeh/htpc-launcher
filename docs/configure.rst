@@ -23,10 +23,11 @@ For example::
   needsKill = true
 
 
-There are two types of sections:
+These are the available sections:
 
-* **startup** -- contains global configuration for |appName|
-* **key** -- contains options for an application bound to an LIRC key code
+* **startup** -- global configuration for |appName|
+* **log** -- options for the log file
+* **key** -- options for a single application bound to an LIRC key code
 
 Global Configuration
 --------------------
@@ -36,6 +37,15 @@ The following options are recognized in the ``startup`` section.
 launch
   The name of an LIRC key code to activate when |appName| starts. This must match one of the configured key
   sections.
+
+Log Configuration
+-----------------
+
+These options control how the |appName| log file behaves.
+
+path
+  The path to the application log file, including file name. If not given, the log file will be created in the
+  user's home directory and will be called . |logFile|.
 
 Key Configuration
 -----------------
