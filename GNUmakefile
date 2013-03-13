@@ -1,5 +1,7 @@
 VENV_DIR = venv
 
+DEPENDENCIES = pytest mock sphinx
+
 .PHONY: test clean doc
 
 all: test doc
@@ -17,7 +19,10 @@ upload: clean
 
 venv:
 	virtualenv venv
-	. $(VENV_DIR)/bin/activate && pip install pytest mock sphinx
+	. $(VENV_DIR)/bin/activate && pip install $(DEPENDENCIES)
 
 doc: venv
 	. $(VENV_DIR)/bin/activate && cd docs && $(MAKE) html man
+
+dependencies:
+	pip install $(DEPENDENCIES)

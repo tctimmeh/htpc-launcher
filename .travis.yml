@@ -1,0 +1,6 @@
+lannguage: python
+python:
+  - "2.7"
+install: make dependencies
+script: py.test test
+
