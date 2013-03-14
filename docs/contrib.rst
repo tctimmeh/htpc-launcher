@@ -34,6 +34,13 @@ Run the |appName| tests by executing this command from the project root director
 
 :command:`make test`
 
+Continuous Integration
+----------------------
+
+This project is built and tested automatically by `Travis CI`_ after every commit to the main repository. Find the
+latest build here: https://travis-ci.org/tctimmeh/htpc-launcher. See the Travis CI documentation for information about
+how to configure the build: http://about.travis-ci.org/docs/.
+
 Building Installation Package
 -----------------------------
 
@@ -85,4 +92,4 @@ Follow these steps to release a new version:
 
 .. _virtualenv: http://www.virtualenv.org/
 .. _Distribute: http://packages.python.org/distribute/
-
+.. _Travis CI: https://travis-ci.org/
