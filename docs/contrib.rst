@@ -34,12 +34,21 @@ Run the |appName| tests by executing this command from the project root director
 
 :command:`make test`
 
+Code Coverage
+-------------
+
+Testing coverage reports are created automatically using the python `Coverage`_ module. A coverage report is shown
+when the tests are run. Run :command:`coverage html` after running the tests to generate the report as HTML.
+
 Continuous Integration
 ----------------------
 
 This project is built and tested automatically by `Travis CI`_ after every commit to the main repository. Find the
 latest build here: https://travis-ci.org/tctimmeh/htpc-launcher. See the Travis CI documentation for information about
 how to configure the build: http://about.travis-ci.org/docs/.
+
+Travis CI also automatically publishes code coverage reports to `Coveralls`_. Find the coveralls page for this
+project here: https://coveralls.io/r/tctimmeh/htpc-launcher.
 
 Building Installation Package
 -----------------------------
@@ -93,3 +102,6 @@ Follow these steps to release a new version:
 .. _virtualenv: http://www.virtualenv.org/
 .. _Distribute: http://packages.python.org/distribute/
 .. _Travis CI: https://travis-ci.org/
+.. _Coverage: https://pypi.python.org/pypi/coverage
+.. _Coveralls: coveralls.io
+
