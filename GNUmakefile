@@ -1,13 +1,13 @@
 VENV_DIR = venv
 
-DEPENDENCIES = pytest mock sphinx
+DEV_DEPS = pytest mock sphinx coverage pytest-cov coveralls
 
-.PHONY: test clean doc
+.PHONY: all test clean doc upload dependencies
 
 all: test doc
 
 test: venv
-	. $(VENV_DIR)/bin/activate && py.test test
+	. $(VENV_DIR)/bin/activate && py.test --cov htpclauncher test
 
 clean:
 	@find . -name \*.pyc | xargs rm -f
@@ -19,10 +19,10 @@ upload: clean
 
 venv:
 	virtualenv venv
-	. $(VENV_DIR)/bin/activate && pip install $(DEPENDENCIES)
+	. $(VENV_DIR)/bin/activate && pip install $(DEV_DEPS)
 
 doc: venv
 	. $(VENV_DIR)/bin/activate && cd docs && $(MAKE) html man
 
 dependencies:
-	pip install $(DEPENDENCIES)
+	pip install $(DEV_DEPS)
