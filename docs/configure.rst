@@ -19,7 +19,7 @@ For example::
 
   [KEY_BLUE]
   process = steam
-  search = .local/share/Steam/.+/steam
+  search = .local/share/Steam/.+/steam$
   needsKill = true
 
 

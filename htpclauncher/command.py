@@ -45,18 +45,19 @@ class Command:
     self._waitForProcess()
 
   def stop(self):
-    pid = self.ostools.findPid(self.search)
-    if not pid:
+    pids = self.ostools.findPids(self.search)
+    if not pids:
       return
 
     self.log.info('Stopping %s', self)
-    if self.needsKill:
-      self.ostools.kill(pid)
-    else:
-      self.ostools.terminate(pid)
+    for pid in pids:
+      if self.needsKill:
+        self.ostools.kill(pid)
+      else:
+        self.ostools.terminate(pid)
 
   def isRunning(self):
-    pid = self.ostools.findPid(self.search)
+    pid = self.ostools.findPids(self.search)
     return pid is not None
 
   def _waitForProcess(self):

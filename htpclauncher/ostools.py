@@ -10,15 +10,21 @@ class OsTools:
     self.log.info('Running process: %s', command)
     return subprocess.Popen(command, shell = True)
 
-  def findPid(self, regex):
+  def findPids(self, regex):
     self.log.debug('Searching for Process with regex: %s', regex)
     findProc = subprocess.Popen('ps -ef | grep -P "%s" | grep -v grep' % regex, shell = True, stdout = subprocess.PIPE)
-    findOut = findProc.communicate()[0]
-    if not findOut:
-      return None
+    stdout_data, stderr_data = findProc.communicate()
+    lines = stdout_data.split('\n')
 
-    self.log.debug('Found proccess: %s', findOut)
-    return findOut.split()[1]
+    pids = []
+    for line in lines:
+      line = line.strip()
+      if not line:
+        continue
+      self.log.debug('Found proccess: %s', line)
+      pids.append(line.split()[1])
+
+    return pids
 
   def terminate(self, pid):
     self.log.debug('Terminating pid %s', str(pid))
